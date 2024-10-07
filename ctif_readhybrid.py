@@ -32,14 +32,13 @@ NEO4J_DATABASE = 'neo4j'
 AZURE_DEPLOYMENT_NAME = st.secrets["AZURE_DEPLOYMENT_NAME"]
 EMBEDDING_MODEL = st.secrets["EMBEDDING_MODEL"]
 
-api_version="2024-06-01"
-endpoint="https://sabikiopenai.openai.azure.com/"
+api_version= AZURE_VERSION
+endpoint= AZURE_ENDPOINT
 llm = AzureChatOpenAI(
     api_version=api_version,
-    # model="sabikiGPT4Deployment",
-    model="gpt4oDeploy",
-    api_key="a9841f320eb64c87a80c0f2d39be383b",
-    azure_endpoint=endpoint,
+    model= AZURE_DEPLOYMENT
+    api_key= AZURE_KEY,
+    azure_endpoint= endpoint,
     temperature=0.3,
     max_tokens = 3000
 )
@@ -113,42 +112,6 @@ def query(user_question):
     )
 
     entity_chain = prompt | llm.with_structured_output(Entities)
-
-    # revoke_invoke = entity_chain.invoke({"question": user_question})
-    # revoke_str_list = str(revoke_invoke)[6:]
-    # revoke_invoke_entity_sentence = ast.literal_eval(revoke_str_list)
-    # my_reembedding = get_embedding(openai_client, revoke_invoke_entity_sentence,EMBEDDING_MODEL)
-    # print (my_reembedding)
-    # result = " ".join(revoke_invoke_entity_sentence)
-    
-    # driver = GraphDatabase.driver(NEO4J_HOST, auth=(NEO4J_USER, NEO4J_PASSWORD), database=NEO4J_DATABASE)
-
-    # with driver.session() as session:
-    #     retrieval_query = f"""
-    #         WITH {my_reembedding} AS e
-    #         CALL db.index.vector.queryNodes('vector',3, e) yield node, score
-    #         with node as Comp, score 
-    #         WITH node AS chunk, score 
-    #     MATCH (chunk)--(d:Document)
-    #     OPTIONAL MATCH (c1:Chunk)-[:NEXT_CHUNK]->(chunk)
-    #     OPTIONAL MATCH (chunk)-[:NEXT_CHUNK]->(c2:Chunk)
-    #     WITH d, c1 as pre, c2 as next,chunk,chunk.position as block_idx,score
-    #     WITH d, apoc.coll.flatten([collect(chunk.text),collect(pre.text),collect(next.text)]) AS a1, collect(chunk)+COLLECT(pre)+COLLECT(next) as chunks,score
-    #     WITH d, a1 AS answers,chunks, max(score) AS maxScore
-    #     RETURN {{source: d.fileName}} AS metadata, 
-    #         answers AS text, maxScore AS score LIMIT 3
-    #         """
-    #     result = session.run(
-    #         retrieval_query
-    #         )
-    #     count = 0
-    #     all_text_info = ""
-    #     for record in result:
-    #         all_text_info = all_text_info + str(record["text"])
-    #         # score = record["score"]
-    #         print (all_text_info)
-    #         count = count + 1
-    #     session.close()
 
     def generate_full_text_query(input: str) -> str:
         """
