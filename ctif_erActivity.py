@@ -53,29 +53,17 @@ client = AzureOpenAI(
     ) 
 
 deployment_name=AZURE_DEPLOYMENT_NAME
-
-api_version="2024-06-01"
-endpoint="https://sabikiopenai.openai.azure.com/"
+api_version = AZURE_VERSION
+endpoint = AZURE_ENDPOINT
 
 llm = AzureChatOpenAI(
     api_version=api_version,
-    # model="sabikiGPT4Deployment",
-    model="gpt4oDeploy",
-    api_key="a9841f320eb64c87a80c0f2d39be383b",
+    model = AZURE_DEPLOYMENT,
+    api_key= AZURE_KEY,
     azure_endpoint=endpoint,
     temperature=0.3,
     max_tokens = 3000
 )
-llamallm = OllamaLLM(
-    model="llama3.1",
-    temperature=0,
-    base_url='52.163.241.32'
-)
-# llamallm = ChatOllama(
-#     model="llama3.1",
-#     temperature=0,
-#     base_url='52.163.241.32'
-# )
 
 def chat_request(start_phrase):
     messages = [HumanMessage(content=start_phrase)]
@@ -148,13 +136,3 @@ with st.form("Person_Email_form",clear_on_submit=False):
 
         response = chat_request(myPrompt)
         st.write(response)
-        # "---"
-        # print("--------")
-        # merged_column = ' '.join(map(str,dfpersonemail['date_activities']))
-        # myPrompt2 = f"""Summarize a person -{dfpersonemail["person"]}'s actitivies based on the information below,before summarizing, please rephrase violence words, and nouns like hate, make the answer as comprehensive as possible \n {merged_column} """
-
-        # print(merged_column)
-
-        # llama_response = chat_llama_request(myPrompt2)
-        # st.write (llama_response)
-        
