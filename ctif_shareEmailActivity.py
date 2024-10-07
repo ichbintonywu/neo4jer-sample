@@ -49,15 +49,13 @@ client = AzureOpenAI(
     ) 
 
 deployment_name=AZURE_DEPLOYMENT_NAME
-
-api_version="2024-06-01"
-endpoint="https://sabikiopenai.openai.azure.com/"
+api_version= AZURE_VERSION
+endpoint= AZURE_ENDPOINT
 
 llm = AzureChatOpenAI(
-    api_version=api_version,
-    # model="sabikiGPT4Deployment",
-    model="gpt4oDeploy",
-    api_key="a9841f320eb64c87a80c0f2d39be383b",
+    api_version = api_version,
+    model= AZURE_DEPLOYMENT,
+    api_key = AZURE_KEY,
     azure_endpoint=endpoint,
     temperature=0.1,
     max_tokens = 3000
